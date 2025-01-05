@@ -1,7 +1,16 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException, Form, UploadFile
+from typing import Optional
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+
+from models import *
+from settings import *
+
+from datetime import date
+import mysql.connector
+
+
 
 app = FastAPI()
 
@@ -63,6 +72,57 @@ async def clients_create(request: Request):
     return templates.TemplateResponse("clients/create.html", {"request": request, "clients": clients})
 
 
+
+
+# Маршрут для добавления клиента
+@app.post("/clients/add")
+async def clients_add(
+    full_name: str = Form(...),
+    phone: str = Form(...),
+    gender: str = Form(...),
+    birth_date: str = Form(...),
+    address: str = Form(...),
+    email: str = Form(...),
+    contract_number: str = Form(...),
+    contract_type: str = Form(...),
+    start_date: str = Form(...),
+    group: str = Form(...),
+    sport_rank: str = Form(...),
+    photo: str = None,
+):
+    try:
+        # Подключение к базе данных
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+
+        # SQL запрос для вставки данных
+        sql_query = """
+        INSERT INTO clients (
+            full_name, phone, gender, birth_date, address, email,
+            contract_number, contract_type, start_date, `group`, sport_rank, photo, comment
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """
+        # Выполнение запроса
+        cursor.execute(sql_query, (
+            full_name, phone, gender, birth_date,
+            address, email, contract_number,
+            contract_type, start_date, group,
+            sport_rank, photo, "comment"
+        ))
+        conn.commit()
+
+        # Закрытие соединения
+        cursor.close()
+        conn.close()
+
+        return {"message": "Клиент успешно добавлен"}
+    except mysql.connector.Error as err:
+        raise HTTPException(status_code=500, detail=f"Ошибка базы данных: {err}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Неизвестная ошибка: {e}")
+
+
+
 @app.get("/clients/update", response_class=HTMLResponse)
 async def clients_update(request: Request):
 
@@ -84,3 +144,7 @@ async def clients_update(request: Request):
     ]
 
     return templates.TemplateResponse("clients/update.html", {"request": request, "clients": clients})
+
+
+
+
