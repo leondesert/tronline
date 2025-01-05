@@ -12,13 +12,13 @@ templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/", response_class=HTMLResponse)
-async def read_root(request: Request):
+async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "message": "Привет из FastAPI!"})
 
 
 
 @app.get("/clients", response_class=HTMLResponse)
-async def read_root(request: Request):
+async def clients_index(request: Request):
 
     clients = [
         {
@@ -37,4 +37,50 @@ async def read_root(request: Request):
         }
     ]
 
-    return templates.TemplateResponse("clients.html", {"request": request, "clients": clients})
+    return templates.TemplateResponse("clients/index.html", {"request": request, "clients": clients})
+
+
+@app.get("/clients/create", response_class=HTMLResponse)
+async def clients_create(request: Request):
+
+    clients = [
+        {
+            "full_name": "Olivia Rhye",
+            "birth_year": "1994",
+            "phone": "+77075566889",
+            "balance": "200",
+
+        },
+        {
+            "full_name": "Olivia Rhye",
+            "birth_year": "2014",
+            "phone": "+77075566222",
+            "balance": "100",
+
+        }
+    ]
+
+    return templates.TemplateResponse("clients/create.html", {"request": request, "clients": clients})
+
+
+@app.get("/clients/update", response_class=HTMLResponse)
+async def clients_update(request: Request):
+
+    clients = [
+        {
+            "full_name": "Olivia Rhye",
+            "birth_year": "1994",
+            "phone": "+77075566889",
+            "balance": "200",
+
+        },
+        {
+            "full_name": "Olivia Rhye",
+            "birth_year": "2014",
+            "phone": "+77075566222",
+            "balance": "100",
+
+        }
+    ]
+
+    return templates.TemplateResponse("clients/update.html", {"request": request, "clients": clients})
