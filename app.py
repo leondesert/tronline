@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, HTTPException, Form, UploadFile
+from fastapi import FastAPI, Request, HTTPException, Form, File, UploadFile
 from typing import Optional
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -8,8 +8,8 @@ from models import *
 from settings import *
 
 from datetime import date
-import mysql.connector
-
+import pymysql
+import uuid
 
 
 app = FastAPI()
@@ -72,6 +72,23 @@ async def clients_create(request: Request):
     return templates.TemplateResponse("clients/create.html", {"request": request, "clients": clients})
 
 
+def save_file(file: UploadFile) -> str:
+    # Убедитесь, что папка для загрузок существует
+    os.makedirs("uploads", exist_ok=True)
+
+    # Генерация уникального имени файла
+    ext = os.path.splitext(file.filename)[1]  # Получение расширения файла
+    unique_filename = f"{uuid.uuid4()}{ext}"  # Генерация уникального имени
+    filepath = os.path.join("uploads", unique_filename)
+
+    # Сохранение файла
+    try:
+        with open(filepath, "wb") as buffer:
+            buffer.write(file.file.read())
+    except Exception as e:
+        raise RuntimeError(f"Ошибка при сохранении файла: {e}")
+
+    return filepath
 
 
 # Маршрут для добавления клиента
@@ -88,27 +105,16 @@ async def clients_add(
     start_date: str = Form(...),
     group: str = Form(...),
     sport_rank: str = Form(...),
-    photo: str = Form(...),
+    photo: UploadFile = File(...),
 ):
     try:
 
-        full_name = "sdasdasdas"
-        phone = "23213213213"
-        gender = "23213213213"
-        birth_date = "06.01.2025"
-        address = "23213213213"
-        email = "23213213213"
-        contract_number = "23213213213"
-        contract_type = "23213213213"
-        start_date = "06.01.2025"
-        group = "23213213213"
-        sport_rank = "23213213213"
-        photo = "23213213213"
-        comment = "23213213213"
+        # Сохраняем фото на сервере и получаем имя файла
+        photo_filename = save_file(photo)
 
 
         # Подключение к базе данных
-        conn = mysql.connector.connect(**db_config)
+        conn = pymysql.connect(**db_config)
         cursor = conn.cursor()
 
         # SQL запрос для вставки данных
@@ -118,48 +124,34 @@ async def clients_add(
             contract_number, contract_type, start_date, `group`, sport_rank, photo, comment
         ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
+
         # Выполнение запроса
         cursor.execute(sql_query, (
-            full_name, phone, gender, birth_date,
-            address, email, contract_number,
-            contract_type, start_date, group,
-            sport_rank, photo, comment
+            full_name, phone, gender, birth_date, address, email,
+            contract_number, contract_type, start_date, group, sport_rank, photo_filename, "comment"
         ))
-        conn.commit()
-
-        # Закрытие соединения
+        conn.commit()  # Фиксация изменений
         cursor.close()
         conn.close()
 
-        return {"message": "Клиент успешно добавлен"}
-    except mysql.connector.Error as err:
-        raise HTTPException(status_code=500, detail=f"Ошибка базы данных: {err}")
+        return {"message": "Данные успешно добавлены в таблицу!"}
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Неизвестная ошибка: {e}")
+        print(f"Ошибка: {e}")
+        return f"Ошибка: {e}"
+
 
 
 
 @app.get("/clients/update", response_class=HTMLResponse)
 async def clients_update(request: Request):
+    return templates.TemplateResponse("clients/update.html", {"request": request})
 
-    clients = [
-        {
-            "full_name": "Olivia Rhye",
-            "birth_year": "1994",
-            "phone": "+77075566889",
-            "balance": "200",
 
-        },
-        {
-            "full_name": "Olivia Rhye",
-            "birth_year": "2014",
-            "phone": "+77075566222",
-            "balance": "100",
 
-        }
-    ]
+# uvicorn app:app --reload
 
-    return templates.TemplateResponse("clients/update.html", {"request": request, "clients": clients})
+
 
 
 
