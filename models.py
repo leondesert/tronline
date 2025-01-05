@@ -16,3 +16,4 @@ class Client(BaseModel):
     sport_rank: str
     photo: str
     comment: str | None = None
+
