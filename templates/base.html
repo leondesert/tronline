@@ -727,14 +727,29 @@
 
 
       <!-- -------------------------------------------- -->
-      <!-- Тело -->
+      <!-- Тело страницы -->
       <!-- -------------------------------------------- -->
 
       <div class="body-wrapper">
-        {% block content %}
-        <!-- Тело -->
-        {% endblock %}
+        <div class="container-fluid">
+
+          <!-- Уведомления -->
+          {% if message %}
+          <div class="col-lg-6">
+              <div class="alert alert-{{ 'success' if status == 'success' else 'danger' }} alert-dismissible bg-{{ 'success' if status == 'success' else 'danger' }} text-white border-0 fade show" role="alert">
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                  {{ message }}
+              </div>
+          </div>
+          {% endif %}
+
+          <!-- Основное содержимое страницы -->
+          {% block content %}{% endblock %}
+
+        </div>
       </div>
+
+
       <button class="btn btn-danger p-3 rounded-circle d-flex align-items-center justify-content-center customizer-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
         <i class="icon ti ti-settings fs-7"></i>
       </button>

@@ -29,47 +29,31 @@ async def home(request: Request):
 @app.get("/clients", response_class=HTMLResponse)
 async def clients_index(request: Request):
 
-    clients = [
-        {
-            "full_name": "Olivia Rhye",
-            "birth_year": "1994",
-            "phone": "+77075566889",
-            "balance": "200",
+    # clients = [
+    #     {
+    #         "full_name": "Olivia Rhye",
+    #         "birth_year": "1994",
+    #         "phone": "+77075566889",
+    #         "balance": "200",
+    #
+    #     },
+    #     {
+    #         "full_name": "Olivia Rhye",
+    #         "birth_year": "2014",
+    #         "phone": "+77075566222",
+    #         "balance": "100",
+    #
+    #     }
+    # ]
 
-        },
-        {
-            "full_name": "Olivia Rhye",
-            "birth_year": "2014",
-            "phone": "+77075566222",
-            "balance": "100",
-
-        }
-    ]
+    clients = get_clients()
 
     return templates.TemplateResponse("clients/index.html", {"request": request, "clients": clients})
 
 
 @app.get("/clients/create", response_class=HTMLResponse)
 async def clients_create(request: Request):
-
-    clients = [
-        {
-            "full_name": "Olivia Rhye",
-            "birth_year": "1994",
-            "phone": "+77075566889",
-            "balance": "200",
-
-        },
-        {
-            "full_name": "Olivia Rhye",
-            "birth_year": "2014",
-            "phone": "+77075566222",
-            "balance": "100",
-
-        }
-    ]
-
-    return templates.TemplateResponse("clients/create.html", {"request": request, "clients": clients})
+    return templates.TemplateResponse("clients/create.html", {"request": request})
 
 
 def save_file(file: UploadFile) -> str:
@@ -91,9 +75,45 @@ def save_file(file: UploadFile) -> str:
     return filepath
 
 
+def get_clients():
+    try:
+        # Подключение к базе данных
+        conn = pymysql.connect(**db_config)
+        cursor = conn.cursor(pymysql.cursors.DictCursor)  # Возвращает данные в виде словарей
+
+        # SQL-запрос для извлечения данных
+        sql_query = """
+        SELECT 
+            full_name,
+            YEAR(birth_date) as birth_date,
+            phone,
+            balance
+        FROM clients
+        """
+
+        # Выполнение запроса
+        cursor.execute(sql_query)
+        results = cursor.fetchall()  # Получение всех строк результата
+
+        print(results)
+
+        # Закрытие курсора и соединения
+        cursor.close()
+        conn.close()
+
+        return results
+
+    except pymysql.MySQLError as e:
+        print(f"Ошибка базы данных: {e}")
+        return []
+    except Exception as e:
+        print(f"Общая ошибка: {e}")
+        return []
+
 # Маршрут для добавления клиента
 @app.post("/clients/add")
 async def clients_add(
+    request: Request,
     full_name: str = Form(...),
     phone: str = Form(...),
     gender: str = Form(...),
@@ -134,11 +154,30 @@ async def clients_add(
         cursor.close()
         conn.close()
 
-        return {"message": "Данные успешно добавлены в таблицу!"}
+        # Получить клиенты
+        clients = get_clients()
+
+        return templates.TemplateResponse("clients/index.html", {
+            "request": request,
+            "clients": clients,
+            "status": "success",
+            "message": "Клиент успешно добавлен!"
+        })
+
 
     except Exception as e:
         print(f"Ошибка: {e}")
-        return f"Ошибка: {e}"
+
+        # Получить клиенты
+        clients = get_clients()
+
+
+        return templates.TemplateResponse("clients/index.html", {
+            "request": request,
+            "clients": clients,
+            "status": "error",
+            "message": e
+        })
 
 
 
