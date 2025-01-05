@@ -19,4 +19,22 @@ async def read_root(request: Request):
 
 @app.get("/clients", response_class=HTMLResponse)
 async def read_root(request: Request):
-    return templates.TemplateResponse("clients.html", {"request": request, "message": "Привет из FastAPI!"})
+
+    clients = [
+        {
+            "full_name": "Olivia Rhye",
+            "birth_year": "1994",
+            "phone": "+77075566889",
+            "balance": "200",
+
+        },
+        {
+            "full_name": "Olivia Rhye",
+            "birth_year": "2014",
+            "phone": "+77075566222",
+            "balance": "100",
+
+        }
+    ]
+
+    return templates.TemplateResponse("clients.html", {"request": request, "clients": clients})
