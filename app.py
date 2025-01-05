@@ -88,9 +88,25 @@ async def clients_add(
     start_date: str = Form(...),
     group: str = Form(...),
     sport_rank: str = Form(...),
-    photo: str = None,
+    photo: str = Form(...),
 ):
     try:
+
+        full_name = "sdasdasdas"
+        phone = "23213213213"
+        gender = "23213213213"
+        birth_date = "06.01.2025"
+        address = "23213213213"
+        email = "23213213213"
+        contract_number = "23213213213"
+        contract_type = "23213213213"
+        start_date = "06.01.2025"
+        group = "23213213213"
+        sport_rank = "23213213213"
+        photo = "23213213213"
+        comment = "23213213213"
+
+
         # Подключение к базе данных
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
@@ -107,7 +123,7 @@ async def clients_add(
             full_name, phone, gender, birth_date,
             address, email, contract_number,
             contract_type, start_date, group,
-            sport_rank, photo, "comment"
+            sport_rank, photo, comment
         ))
         conn.commit()
 
