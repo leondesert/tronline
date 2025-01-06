@@ -1,6 +1,3 @@
-console.log("qqqqqqqqqqqqq");
-
-
 document.getElementById('buttonSave').addEventListener('click', async function () {
     const form = document.querySelector('form'); // Находим форму
     const formData = new FormData(form); // Собираем данные из формы

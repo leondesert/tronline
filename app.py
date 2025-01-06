@@ -126,9 +126,14 @@ def get_clients():
         print(f"Общая ошибка: {e}")
         return []
 
+
+
+
+
 # Маршрут для добавления клиента
 @app.post("/clients/add")
 async def clients_add(
+    request: Request,
     full_name: str = Form(...),
     phone: str = Form(...),
     gender: str = Form(...),
