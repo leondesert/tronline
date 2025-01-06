@@ -1,3 +1,26 @@
+// Уведомления
+document.addEventListener('DOMContentLoaded', function () {
+    // Получаем данные из sessionStorage
+    const toastStatus = sessionStorage.getItem('toastStatus');
+    const toastTitle = sessionStorage.getItem('toastTitle');
+    const toastMessage = sessionStorage.getItem('toastMessage');
+
+    console.log(toastStatus)
+    console.log(toastMessage)
+
+    if (toastStatus && toastMessage) {
+        // Показываем toast
+        showToast(toastStatus, toastTitle, toastMessage);
+
+        // Очищаем данные из sessionStorage
+        sessionStorage.removeItem('toastStatus');
+        sessionStorage.removeItem('toastTitle');
+        sessionStorage.removeItem('toastMessage');
+    }
+});
+
+
+
 // Выбрать все записи
 document.getElementById('selectAll').addEventListener('change', function() {
     const isChecked = this.checked;
@@ -5,61 +28,6 @@ document.getElementById('selectAll').addEventListener('change', function() {
 });
 
 
-function showAlert(type, message) {
-    const alertContainer = document.getElementById('alert-container');
-    const successAlert = document.getElementById('success-alert');
-    const errorAlert = document.getElementById('error-alert');
-
-    // Скрыть все уведомления перед показом нового
-    successAlert.style.display = 'none';
-    errorAlert.style.display = 'none';
-
-    if (type === 'success') {
-      document.getElementById('success-message').textContent = message;
-      successAlert.style.display = 'block';
-    } else if (type === 'error') {
-      document.getElementById('error-message').textContent = message;
-      errorAlert.style.display = 'block';
-    }
-
-    // Показать контейнер
-    alertContainer.style.display = 'block';
-
-    // Автоматически скрыть уведомление через 5 секунд
-    setTimeout(() => {
-      alertContainer.style.display = 'none';
-    }, 5000);
-  }
-
-
-// Функция для Toast
-function showToast(type, title, message) {
-    const toast = document.getElementById('myToast');
-    const toastTitle = document.getElementById('toastTitle');
-    const toastMessage = document.getElementById('toastMessage');
-    let myAlert = document.querySelectorAll('.toast')[0];
-
-
-    // Обновляем заголовок и сообщение
-    toastTitle.textContent = title;
-    toastMessage.textContent = message;
-
-    // Меняем стиль в зависимости от типа
-    myAlert.classList.remove('text-bg-primary', 'text-bg-success', 'text-bg-danger', 'text-bg-info');
-    if (type === 'success') {
-        myAlert.classList.add('text-bg-success');
-    } else if (type === 'error') {
-        myAlert.classList.add('text-bg-danger');
-    } else if (type === 'info') {
-        myAlert.classList.add('text-bg-info');
-    }
-
-    // Показываем toast
-    if (myAlert) {
-      let bsAlert = new bootstrap.Toast(myAlert);
-      bsAlert.show();
-    }
-}
 
 
 // Удалить выбранные записи
@@ -107,9 +75,6 @@ document.getElementById('deleteSelected').addEventListener('click', async functi
       showToast('error', 'Ошибка', 'Ошибка при удалении записей.');
     }
 });
-
-
-
 
 
 

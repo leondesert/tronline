@@ -133,7 +133,6 @@ def get_clients():
 # Маршрут для добавления клиента
 @app.post("/clients/add")
 async def clients_add(
-    request: Request,
     full_name: str = Form(...),
     phone: str = Form(...),
     gender: str = Form(...),
@@ -178,7 +177,7 @@ async def clients_add(
 
     except Exception as e:
         print(f"Ошибка: {e}")
-        return {"status": "error", "message": e}
+        return {"status": "error", "message": str(e)}
 
 
 @app.delete("/clients/delete/{client_id}")

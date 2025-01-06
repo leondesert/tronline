@@ -10,12 +10,23 @@ document.getElementById('buttonSave').addEventListener('click', async function (
         });
 
         if (response.ok) {
-            const result = await response.json();
-            console.log(result);
+            const responseData = await response.json();
 
-        } else {
-            const result = await response.json();
-            console.log(result);
+            console.log(responseData.message);
+
+            // Проверяем статус ответа и показываем соответствующее уведомление
+            if (responseData.status === 'success') {
+                // Сохраняем сообщение в sessionStorage
+                sessionStorage.setItem('toastStatus', 'success');
+                sessionStorage.setItem('toastTitle', 'Успешно');
+                sessionStorage.setItem('toastMessage', responseData.message);
+
+                // Перенаправляем на страницу клиентов
+                window.location.href = '/clients';
+            } else {
+                // Если возникла ошибка, показываем уведомление об ошибке
+                showToast('error', 'Ошибка', responseData.message);
+            }
         }
     } catch (error) {
         console.error('Ошибка:', error);
