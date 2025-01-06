@@ -17,3 +17,8 @@ class Client(BaseModel):
     photo: str
     comment: str | None = None
 
+
+
+# Model for bulk delete
+class DeleteClientsRequest(BaseModel):
+    ids: list[int]

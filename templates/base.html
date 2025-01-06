@@ -18,6 +18,18 @@
 </head>
 
 <body class="link-sidebar">
+<!-- Toast -->
+  <div class="toast toast-onload align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-body hstack align-items-start gap-6">
+      <i class="ti ti-alert-circle fs-6"></i>
+      <div>
+        <h5 id="toastTitle" class="text-white fs-3 mb-1">Welcome to MatDash</h5>
+        <h6 id="toastMessage" class="text-white fs-2 mb-0">Easy to costomize the Template!!!</h6>
+      </div>
+      <button type="button" class="btn-close btn-close-white fs-2 m-0 ms-auto shadow-none" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+
 
   <div id="main-wrapper">
     <!-- Sidebar Start -->
@@ -733,7 +745,7 @@
       <div class="body-wrapper">
         <div class="container-fluid">
 
-          <!-- Уведомления -->
+          <!-- Уведомления 1 -->
           {% if message %}
           <div class="col-lg-6">
               <div class="alert alert-{{ 'success' if status == 'success' else 'danger' }} alert-dismissible bg-{{ 'success' if status == 'success' else 'danger' }} text-white border-0 fade show" role="alert">
@@ -742,6 +754,20 @@
               </div>
           </div>
           {% endif %}
+
+          <!-- Уведомления 2 -->
+          <div id="alert-container" class="col-lg-6" >
+            <div class="alert alert-success alert-dismissible bg-success text-white border-0 fade show" role="alert" id="success-alert" style="display: none;">
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+              <strong>Успех - </strong><span id="success-message"></span>
+            </div>
+            <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert" id="error-alert" style="display: none;">
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+              <strong>Ошибка - </strong><span id="error-message"></span>
+            </div>
+          </div>
+
+
 
           <!-- Основное содержимое страницы -->
           {% block content %}{% endblock %}

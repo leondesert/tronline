@@ -20,6 +20,20 @@ templates = Jinja2Templates(directory="templates")
 # Подключаем статику (CSS, JS и т.д.)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+
+
+
+# Database connection
+def get_db_connection():
+    return pymysql.connect(
+        host='best18fv.beget.tech',
+        user='best18fv_tron',
+        password='QFQLTtWcy9&R',
+        database='best18fv_tron',
+        cursorclass=pymysql.cursors.DictCursor
+    )
+
+
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "message": "Привет из FastAPI!"})
@@ -84,6 +98,7 @@ def get_clients():
         # SQL-запрос для извлечения данных
         sql_query = """
         SELECT 
+            id,
             full_name,
             YEAR(birth_date) as birth_date,
             phone,
@@ -179,6 +194,47 @@ async def clients_add(
             "message": e
         })
 
+
+@app.delete("/clients/delete/{client_id}")
+async def delete_client(client_id: int):
+    connection = get_db_connection()
+    try:
+        with connection.cursor() as cursor:
+            # Выполняем удаление клиента
+            sql = "DELETE FROM clients WHERE id = %s"
+            cursor.execute(sql, (client_id,))
+            connection.commit()
+
+            # Проверяем, было ли удалено хотя бы одно совпадение
+            if cursor.rowcount == 0:
+                return {"status": "error", "message": "Клиент не найден"}
+
+            return {"status": "success", "message": "Клиент удален!"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+    finally:
+        connection.close()
+
+
+@app.post("/clients/delete_bulk")
+async def delete_bulk_clients(request: DeleteClientsRequest):
+    connection = get_db_connection()
+    try:
+        with connection.cursor() as cursor:
+            # Создаем SQL-запрос для удаления нескольких записей
+            format_strings = ', '.join(['%s'] * len(request.ids))
+            sql = f"DELETE FROM clients WHERE id IN ({format_strings})"
+            cursor.execute(sql, tuple(request.ids))
+            connection.commit()
+
+            if cursor.rowcount == 0:
+                return {"status": "error", "message": "Не найдено записей для удаления."}
+
+            return {"status": "success", "message": "Клиенты успешно удалены"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+    finally:
+        connection.close()
 
 
 

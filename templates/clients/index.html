@@ -22,13 +22,12 @@
   <!-- ----------------------------------------- -->
 
   <div class="card-body">
-
       <form>
         <div class="row">
           <div class="col-sm-3">
             <div class="mb-3">
                 <label class="form-label">Поиск</label>
-                <input type="text" id="search" class="form-control" placeholder="Введите слово" />
+                <input type="text" id="search" class="form-control" placeholder="Введите слово"/>
             </div>
           </div>
           <div class="col-sm-3">
@@ -52,7 +51,7 @@
           <div class="col-sm-3">
             <div class="mb-3">
                 <label class="form-label">Год рождения</label>
-                <input type="text" id="birth_year" class="form-control" placeholder="" />
+                <input type="text" id="birth_year" class="form-control" placeholder=""/>
             </div>
           </div>
 
@@ -89,7 +88,9 @@
           </div>
         </div>
       </form>
-    </div>
+  </div>
+
+
 
 
 
@@ -98,6 +99,23 @@
   <!-- ----------------------------------------- -->
 
   <div class="card-body p-4">
+
+    <!-- Выполнить -->
+    <div class="btn-group mb-2">
+      <button class="btn btn-secondary dropdown-toggle" type="button"  data-bs-toggle="dropdown" aria-expanded="false">
+        Выполнить
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
+        <li>
+          <a class="dropdown-item" href="javascript:void(0)" id="deleteSelected">Удалить</a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="javascript:void(0)" id="subscriptionButton">Выдать абонемент</a>
+        </li>
+      </ul>
+    </div>
+
+
     <div class="table-responsive mb-4 border rounded-1">
       <table class="table text-nowrap mb-0 align-middle">
         <thead class="text-dark fs-4">
@@ -165,8 +183,9 @@
 </div>
 
 
+<script src="static/js/custom/clients/index.js"></script>
+
 
 {% endblock %}
 
 
-<script src="/static/js/custom/clients/index.js"></script>
