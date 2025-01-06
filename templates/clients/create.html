@@ -11,7 +11,9 @@
               <div class="card-header text-bg-primary">
                 <h4 class="mb-0 text-white">Создать клиента</h4>
               </div>
-              <form action="/clients/add" method="POST" enctype="multipart/form-data">
+
+              <!-- Форма-->
+              <form action="/create/add" method="post">
                 <div>
                   <div class="card-body">
                     <h4 class="card-title">Личная информация</h4>
@@ -28,7 +30,7 @@
                       <div class="col-md-6">
                         <div class="mb-3">
                           <label class="form-label">Телефон</label>
-                          <input type="text" id="phone" name="phone" class="form-control international-inputmask" placeholder="" inputmode="text" value="1234567890"/>
+                          <input type="text" id="phone" name="phone" class="form-control international-inputmask" placeholder="" inputmode="text" value="12345678901"/>
                         </div>
                       </div>
                     </div>
@@ -135,7 +137,7 @@
 
                   <div class="form-actions">
                     <div class="card-body border-top">
-                      <button type="submit" class="btn btn-primary">
+                      <button type="button" class="btn btn-primary" id="buttonSave">
                         Сохранить
                       </button>
                       <button type="button" class="btn bg-danger-subtle text-danger ms-6">
@@ -150,6 +152,9 @@
             <!-- end Person Info -->
           </div>
 </div>
+
+
+<script src="static/js/custom/clients/scripts.js"></script>
 
 {% endblock %}
 

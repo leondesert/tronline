@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request, HTTPException, Form, File, UploadFile
+from fastapi.responses import RedirectResponse
 from typing import Optional
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -128,7 +129,6 @@ def get_clients():
 # Маршрут для добавления клиента
 @app.post("/clients/add")
 async def clients_add(
-    request: Request,
     full_name: str = Form(...),
     phone: str = Form(...),
     gender: str = Form(...),
@@ -146,7 +146,6 @@ async def clients_add(
 
         # Сохраняем фото на сервере и получаем имя файла
         photo_filename = save_file(photo)
-
 
         # Подключение к базе данных
         conn = pymysql.connect(**db_config)
@@ -169,30 +168,12 @@ async def clients_add(
         cursor.close()
         conn.close()
 
-        # Получить клиенты
-        clients = get_clients()
-
-        return templates.TemplateResponse("clients/index.html", {
-            "request": request,
-            "clients": clients,
-            "status": "success",
-            "message": "Клиент успешно добавлен!"
-        })
-
+        # Возврат успешного ответа
+        return {"status": "success", "message": "Клиент успешно добавлен"}
 
     except Exception as e:
         print(f"Ошибка: {e}")
-
-        # Получить клиенты
-        clients = get_clients()
-
-
-        return templates.TemplateResponse("clients/index.html", {
-            "request": request,
-            "clients": clients,
-            "status": "error",
-            "message": e
-        })
+        return {"status": "error", "message": e}
 
 
 @app.delete("/clients/delete/{client_id}")
