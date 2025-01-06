@@ -4,7 +4,7 @@ document.getElementById('buttonSave').addEventListener('click', async function (
 
 
     try {
-        const response = await fetch('/clients/add', {
+        const response = await fetch(params['action'], {
             method: 'POST',
             body: formData,
         });

@@ -44,23 +44,6 @@ async def home(request: Request):
 @app.get("/clients", response_class=HTMLResponse)
 async def clients_index(request: Request):
 
-    # clients = [
-    #     {
-    #         "full_name": "Olivia Rhye",
-    #         "birth_year": "1994",
-    #         "phone": "+77075566889",
-    #         "balance": "200",
-    #
-    #     },
-    #     {
-    #         "full_name": "Olivia Rhye",
-    #         "birth_year": "2014",
-    #         "phone": "+77075566222",
-    #         "balance": "100",
-    #
-    #     }
-    # ]
-
     clients = get_clients()
 
     return templates.TemplateResponse("clients/index.html", {"request": request, "clients": clients})
@@ -68,7 +51,20 @@ async def clients_index(request: Request):
 
 @app.get("/clients/create", response_class=HTMLResponse)
 async def clients_create(request: Request):
-    return templates.TemplateResponse("clients/create.html", {"request": request})
+    client = {
+        "full_name": "Андрей"
+    }
+
+    params = {
+        "title_card": "Создать клиента",
+        "action": "/clients/add",
+    }
+
+    return templates.TemplateResponse("clients/create.html", {
+        "request": request,
+        "params": params,
+        "client": client
+    })
 
 
 def save_file(file: UploadFile) -> str:
@@ -88,7 +84,6 @@ def save_file(file: UploadFile) -> str:
         raise RuntimeError(f"Ошибка при сохранении файла: {e}")
 
     return filepath
-
 
 def get_clients():
     try:
@@ -119,14 +114,40 @@ def get_clients():
 
         return results
 
-    except pymysql.MySQLError as e:
-        print(f"Ошибка базы данных: {e}")
-        return []
     except Exception as e:
         print(f"Общая ошибка: {e}")
         return []
 
+def get_client_by_id(client_id):
+    # Подключение к базе данных
+    conn = pymysql.connect(**db_config)
+    cursor = conn.cursor(pymysql.cursors.DictCursor)  # Возвращает данные в виде словарей
 
+    try:
+        # SQL-запрос для извлечения данных по id
+        sql_query = """
+        SELECT 
+            id,
+            full_name,
+            YEAR(birth_date) as birth_date,
+            phone,
+            balance
+        FROM clients
+        WHERE id = %s
+        """
+
+        # Выполнение запроса с параметром
+        cursor.execute(sql_query, (client_id,))
+        result = cursor.fetchone()  # Получение одной строки результата
+
+        print(result)  # Вывод результата для проверки
+
+        return result
+
+    finally:
+        # Закрытие курсора и соединения
+        cursor.close()
+        conn.close()
 
 
 
@@ -180,6 +201,72 @@ async def clients_add(
         return {"status": "error", "message": str(e)}
 
 
+
+
+@app.post("/clients/update")
+async def clients_update(
+    id: int = Form(...),  # Получение идентификатора клиента
+    full_name: str = Form(...),
+    phone: str = Form(...),
+    gender: str = Form(...),
+    birth_date: str = Form(...),
+    address: str = Form(...),
+    email: str = Form(...),
+    contract_number: str = Form(...),
+    contract_type: str = Form(...),
+    start_date: str = Form(...),
+    group: str = Form(...),
+    sport_rank: str = Form(...),
+    photo: UploadFile = File(...),
+):
+    try:
+        # Сохраняем фото на сервере и получаем имя файла
+        photo_filename = save_file(photo)
+
+        # Подключение к базе данных
+        conn = pymysql.connect(**db_config)
+        cursor = conn.cursor()
+
+        # SQL запрос для обновления данных
+        sql_query = """
+        UPDATE clients
+        SET 
+            full_name = %s,
+            phone = %s,
+            gender = %s,
+            birth_date = %s,
+            address = %s,
+            email = %s,
+            contract_number = %s,
+            contract_type = %s,
+            start_date = %s,
+            `group` = %s,
+            sport_rank = %s,
+            photo = %s,
+            comment = %s
+        WHERE id = %s
+        """
+
+        # Выполнение запроса
+        cursor.execute(sql_query, (
+            full_name, phone, gender, birth_date, address, email,
+            contract_number, contract_type, start_date, group, sport_rank, photo_filename,
+            "comment", id
+        ))
+        conn.commit()  # Фиксация изменений
+        cursor.close()
+        conn.close()
+
+        # Возврат успешного ответа
+        return {"status": "success", "message": "Данные клиента обновлены"}
+
+    except Exception as e:
+        print(f"Ошибка: {e}")
+        return {"status": "error", "message": str(e)}
+
+
+
+
 @app.delete("/clients/delete/{client_id}")
 async def delete_client(client_id: int):
     connection = get_db_connection()
@@ -223,9 +310,25 @@ async def delete_bulk_clients(request: DeleteClientsRequest):
 
 
 
-@app.get("/clients/update", response_class=HTMLResponse)
-async def clients_update(request: Request):
-    return templates.TemplateResponse("clients/update.html", {"request": request})
+@app.get("/clients/update/{client_id}", response_class=HTMLResponse)
+async def clients_update(request: Request, client_id: int):
+
+    client = get_client_by_id(client_id)
+
+    params = {
+        "title_card": "Редактировать клиента",
+        "action": "/clients/update",
+    }
+
+    return templates.TemplateResponse("clients/create.html", {
+        "request": request,
+        "params": params,
+        "client": client
+    })
+
+
+
+
 
 
 
