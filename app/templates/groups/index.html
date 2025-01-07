@@ -26,64 +26,25 @@
         <div class="row">
           <div class="col-sm-3">
             <div class="mb-3">
-                <label class="form-label">Поиск</label>
-                <input type="text" id="search" class="form-control" placeholder="Введите слово"/>
+                <label class="form-label">Название</label>
+                <input type="text" id="name_group" class="form-control" placeholder="Найти"/>
             </div>
           </div>
           <div class="col-sm-3">
             <div class="mb-3">
-                <label class="form-label">Группы</label>
+                <label class="form-label">Тренер</label>
                 <select class="form-select">
                   <option value="">Male</option>
                   <option value="">Female</option>
                 </select>
             </div>
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-3 d-flex align-items-end">
             <div class="mb-3">
-                <label class="form-label">Пол</label>
-                <select class="form-select">
-                  <option value="">Male</option>
-                  <option value="">Female</option>
-                </select>
-            </div>
-          </div>
-          <div class="col-sm-3">
-            <div class="mb-3">
-                <label class="form-label">Год рождения</label>
-                <input type="text" id="birth_year" class="form-control" placeholder=""/>
-            </div>
-          </div>
-
-
-          <div class="col-12">
-            <div class="d-md-flex align-items-center">
-              <div class="form-check ms-auto">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckUnpaidLessons" />
-                <label class="form-check-label" for="flexCheckUnpaidLessons">
-                  Есть неоплаченные занятия
-                </label>
-              </div>
-              <div class="form-check ms-auto">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckNoGroup" />
-                <label class="form-check-label" for="flexCheckNoGroup">
-                  Без группы
-                </label>
-              </div>
-              <div class="form-check ms-auto">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckNegativeBalance" />
-                <label class="form-check-label" for="flexCheckNegativeBalance">
-                  Отрицательный баланс
-                </label>
-              </div>
-
-              <div class="ms-auto mt-3 mt-md-0">
-                <button type="submit" class="btn btn-primary hstack gap-6">
-                  <i class="ti ti-send fs-4"></i>
-                  Фильтровать
-                </button>
-              </div>
-
+              <button type="submit" class="btn btn-primary">
+                <i class="ti ti-send fs-4"></i>
+                Фильтровать
+              </button>
             </div>
           </div>
         </div>
