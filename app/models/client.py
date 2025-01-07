@@ -135,6 +135,8 @@ class ClientModel:
 
     @staticmethod
     def delete_client_selects(client_ids):
+        if not client_ids:  # Проверка, что список не пустой
+            raise Exception("Список ID не может быть пустым.")
 
         format_strings = ', '.join(['%s'] * len(client_ids))
         query = f"DELETE FROM clients WHERE id IN ({format_strings})"
@@ -145,6 +147,6 @@ class ClientModel:
 
                 # Проверяем, было ли удалено хотя бы одно совпадение
                 if cursor.rowcount == 0:
-                    raise "Не найдено записей для удаления."
+                    raise Exception("Не найдено записей для удаления.")
 
                 return "Клиенты удалены!"

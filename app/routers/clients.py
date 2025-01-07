@@ -186,8 +186,7 @@ async def delete_client(client_id: int):
 async def delete_bulk(request: DeleteClientsRequest):
     try:
         # удалить клиентов
-        print(request.ids)
-        message = ClientService.delete_client(request.ids)
+        message = ClientService.delete_client_selects(request.ids)
 
         return {"status": "success", "message": message}
     except Exception as e:

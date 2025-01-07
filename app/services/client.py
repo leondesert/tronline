@@ -16,3 +16,7 @@ class ClientService:
     @staticmethod
     def delete_client(client_id: int):
         return ClientModel.delete_client(client_id)
+
+    @staticmethod
+    def delete_client_selects(client_ids):
+        return ClientModel.delete_client_selects(client_ids)
