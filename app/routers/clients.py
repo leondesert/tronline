@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request, HTTPException, Form, File, UploadFile
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-
+from app.models.client import *
 from app.services.client import *
 from app.schemas.client import *
 
@@ -140,6 +140,7 @@ async def clients_update(
 
         # Формируем параметры для добавления в базу данных
         client = {
+            "id": id,
             "full_name": full_name,
             "phone": phone,
             "gender": gender,
@@ -182,31 +183,24 @@ async def delete_client(client_id: int):
 
 
 @router.post("/delete_bulk")
-async def delete_bulk_clients(request: DeleteClientsRequest):
-    connection = get_db_connection()
+async def delete_bulk(request: DeleteClientsRequest):
     try:
-        with connection.cursor() as cursor:
-            # Создаем SQL-запрос для удаления нескольких записей
-            format_strings = ', '.join(['%s'] * len(request.ids))
-            sql = f"DELETE FROM clients WHERE id IN ({format_strings})"
-            cursor.execute(sql, tuple(request.ids))
-            connection.commit()
+        # удалить клиентов
+        print(request.ids)
+        message = ClientService.delete_client(request.ids)
 
-            if cursor.rowcount == 0:
-                return {"status": "error", "message": "Не найдено записей для удаления."}
-
-            return {"status": "success", "message": "Клиенты успешно удалены"}
+        return {"status": "success", "message": message}
     except Exception as e:
         return {"status": "error", "message": str(e)}
-    finally:
-        connection.close()
+
 
 
 
 @router.get("/update/{client_id}", response_class=HTMLResponse)
 async def clients_update(request: Request, client_id: int):
 
-    client = get_client_by_id(client_id)
+    client = ClientModel.get_client_by_id(client_id)
+
 
     params = {
         "title_card": "Редактировать клиента",

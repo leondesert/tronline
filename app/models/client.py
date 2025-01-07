@@ -109,16 +109,15 @@ class ClientModel:
                     client.get('sport_rank'),
                     client.get('photo_filename'),
                     client.get('comment'),
-                    client.get('id'),
+                    client.get('id')  # id клиента для обновления
                 ))
 
-                # Проверяем, был ли добавлен хотя бы один клиент
+                conn.commit()  # Фиксация изменений
+
                 if cursor.rowcount > 0:
-                    conn.commit()
-                    return {"message": "Данные клиента обновлены!"}
+                    return "Данные клиента обновлены!"
                 else:
-                    # Если строка не была добавлена, выбрасываем исключение
-                    raise Exception("Ошибка при обновлении данных.")
+                    raise Exception("Клиент с таким ID не найден или данные не были изменены.")
 
     @staticmethod
     def delete_client(client_id: int):
@@ -130,20 +129,22 @@ class ClientModel:
 
                 # Проверяем, было ли удалено хотя бы одно совпадение
                 if cursor.rowcount == 0:
-                    return "Клиент не найден"
+                    raise "Клиент не найден"
 
                 return "Клиент удален!"
 
     @staticmethod
-    def delete_client_bulk(client_id: int):
-        query = "DELETE FROM clients WHERE id = %s"
+    def delete_client_selects(client_ids):
+
+        format_strings = ', '.join(['%s'] * len(client_ids))
+        query = f"DELETE FROM clients WHERE id IN ({format_strings})"
         with get_connection() as conn:
             with conn.cursor() as cursor:
-                cursor.execute(query, (client_id,))
+                cursor.execute(query, tuple(client_ids))
                 conn.commit()
 
                 # Проверяем, было ли удалено хотя бы одно совпадение
                 if cursor.rowcount == 0:
-                    return "Клиент не найден"
+                    raise "Не найдено записей для удаления."
 
-                return "Клиент удален!"
+                return "Клиенты удалены!"
