@@ -1,15 +1,35 @@
-import pymysql
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
 
-db_config = {
-    "host": "best18fv.beget.tech",
-    "user": "best18fv_tron",
-    "password": "QFQLTtWcy9&R",
-    "database": "best18fv_tron",
-}
+from app.routers import clients, groups
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 
-try:
-    conn = pymysql.connect(**db_config)
-    print("Успешное подключение к базе данных")
-    cursor = conn.cursor()
-except pymysql.MySQLError as e:
-    print(f"Ошибка подключения: {e}")
+
+app = FastAPI()
+templates = Jinja2Templates(directory="app/templates")
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+
+# Подключаем маршруты
+app.include_router(clients.router, prefix="/clients", tags=["Clients"])
+app.include_router(groups.router, prefix="/groups", tags=["Groups"])
+
+
+
+@app.get("/", response_class=HTMLResponse)
+async def root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+
+
+
+
+
+# uvicorn app:app --reload
+
+
+
+
+
+

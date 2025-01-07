@@ -66,6 +66,12 @@
                 <span class="hide-menu">Клиенты</span>
               </a>
             </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/groups" aria-expanded="false">
+                <iconify-icon icon="solar:chart-line-duotone" class=""></iconify-icon>
+                <span class="hide-menu">Клиенты</span>
+              </a>
+            </li>
 
 
 
@@ -746,26 +752,27 @@
         <div class="container-fluid">
 
           <!-- Уведомления 1 -->
-          {% if message %}
-          <div class="col-lg-6">
-              <div class="alert alert-{{ 'success' if status == 'success' else 'danger' }} alert-dismissible bg-{{ 'success' if status == 'success' else 'danger' }} text-white border-0 fade show" role="alert">
-                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
-                  {{ message }}
-              </div>
-          </div>
-          {% endif %}
+<!--          {% if message %}-->
+<!--          <div class="col-lg-6">-->
+<!--              <div class="alert alert-{{ 'success' if status == 'success' else 'danger' }} alert-dismissible bg-{{ 'success' if status == 'success' else 'danger' }} text-white border-0 fade show" role="alert">-->
+<!--                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>-->
+<!--                  {{ message }}-->
+<!--              </div>-->
+<!--          </div>-->
+<!--          {% endif %}-->
 
           <!-- Уведомления 2 -->
-          <div id="alert-container" class="col-lg-6" >
-            <div class="alert alert-success alert-dismissible bg-success text-white border-0 fade show" role="alert" id="success-alert" style="display: none;">
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
-              <strong>Успех - </strong><span id="success-message"></span>
-            </div>
-            <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert" id="error-alert" style="display: none;">
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
-              <strong>Ошибка - </strong><span id="error-message"></span>
-            </div>
-          </div>
+<!--          <div id="alert-container" class="col-lg-6" >-->
+<!--            <div class="alert alert-success alert-dismissible bg-success text-white border-0 fade show" role="alert" id="success-alert" style="display: none;">-->
+<!--              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>-->
+<!--              <strong>Успех - </strong><span id="success-message"></span>-->
+<!--            </div>-->
+<!--            <div class="alert alert-danger alert-dismissible bg-danger text-white border-0 fade show" role="alert" id="error-alert" style="display: none;">-->
+<!--              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>-->
+<!--              <strong>Ошибка - </strong><span id="error-message"></span>-->
+<!--            </div>-->
+<!--          </div>-->
+
 
 
 
