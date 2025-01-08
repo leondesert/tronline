@@ -1,6 +1,13 @@
 from pydantic import BaseModel
-from fastapi import Form, UploadFile, File
-from typing import Optional
+from fastapi import UploadFile
+
+
+
+
+class DeleteClients(BaseModel):
+    """Model for bulk delete"""
+    ids: list[int]
+
 
 class ClientForm(BaseModel):
     id: int
@@ -19,6 +26,3 @@ class ClientForm(BaseModel):
 
 
 
-# Model for bulk delete
-class DeleteClientsRequest(BaseModel):
-    ids: list[int]

@@ -183,7 +183,7 @@ async def delete(client_id: int):
 
 
 @router.post("/delete_bulk")
-async def delete_bulk(request: DeleteClientsRequest):
+async def delete_bulk(request: DeleteClients):
     try:
         # удалить клиентов
         message = ClientService.delete_client_selects(request.ids)

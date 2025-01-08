@@ -1,5 +1,13 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List
+
+
+
+class DeleteGroups(BaseModel):
+    """Model for bulk delete"""
+    ids: list[int]
+
+
 
 class RepeaterGroup(BaseModel):
     schedule: str

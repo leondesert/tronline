@@ -122,7 +122,7 @@ class GroupModel:
                 return "Группа удалена!"
 
     @staticmethod
-    def delete_group_selects(group_ids):
+    def delete_selects(group_ids):
         if not group_ids:  # Проверка, что список не пустой
             raise Exception("Список ID не может быть пустым.")
 
@@ -137,4 +137,4 @@ class GroupModel:
                 if cursor.rowcount == 0:
                     raise Exception("Не найдено записей для удаления.")
 
-                return "Клиенты удалены!"
+                return "Группы удалены!"

@@ -95,12 +95,12 @@ async def delete(group_id: int):
         return {"status": "error", "message": str(e)}
 
 
-# @router.post("/delete_bulk")
-# async def delete_bulk(request: DeleteClientsRequest):
-#     try:
-#         # удалить клиентов
-#         message = ClientService.delete_client_selects(request.ids)
-#
-#         return {"status": "success", "message": message}
-#     except Exception as e:
-#         return {"status": "error", "message": str(e)}
+@router.post("/delete_bulk")
+async def delete_bulk(request: DeleteGroups):
+    try:
+        # удалить клиентов
+        message = GroupModel.delete_selects(request.ids)
+
+        return {"status": "success", "message": message}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}

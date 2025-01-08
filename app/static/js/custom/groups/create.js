@@ -26,7 +26,7 @@ document.getElementById('buttonSave').addEventListener('click', async function (
                 sessionStorage.setItem('toastMessage', responseData.message);
 
                 // Перенаправляем на страницу клиентов
-                // window.location.href = '/clients';
+                 window.location.href = '/groups';
             } else {
                 // Если возникла ошибка, показываем уведомление об ошибке
                 showToast('error', 'Ошибка', responseData.message);
