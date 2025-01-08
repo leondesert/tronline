@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const toastTitle = sessionStorage.getItem('toastTitle');
     const toastMessage = sessionStorage.getItem('toastMessage');
 
-    console.log(toastStatus)
-    console.log(toastMessage)
+//    console.log(toastStatus)
+//    console.log(toastMessage)
 
     if (toastStatus && toastMessage) {
         // Показываем toast

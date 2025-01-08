@@ -26,3 +26,20 @@ function showToast(type, title, message) {
       bsAlert.show();
     }
 }
+
+
+// Активируем меню
+document.addEventListener("DOMContentLoaded", () => {
+  const currentUrl = window.location.pathname.split('/')[1]; // Получаем первый сегмент пути
+
+//  console.log(currentUrl);
+
+  const menuItems = document.querySelectorAll('.sidebar-link'); // Выбираем все ссылки меню
+
+  menuItems.forEach((item) => {
+    const itemUrl = item.getAttribute('href').split('/')[1]; // Получаем первый сегмент из href
+    if (itemUrl === currentUrl) {
+      item.classList.add('active'); // Добавляем класс 'active'
+    }
+  });
+});

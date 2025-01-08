@@ -10,15 +10,15 @@ if ((at = "vertical")) {
       ? document.referrer
       : document.location.href;
 
-  var link = document.getElementById("get-url");
-
-  if (currentURL.includes("/main/index.html")) {
-    link.setAttribute("href", "../main/index.html");
-  } else if (currentURL.includes("/index.html")) {
-    link.setAttribute("href", "./index.html");
-  } else {
-    link.setAttribute("href", "./");
-  }
+//  var link = document.getElementById("get-url");
+//
+//  if (currentURL.includes("/main/index.html")) {
+//    link.setAttribute("href", "../main/index.html");
+//  } else if (currentURL.includes("/index.html")) {
+//    link.setAttribute("href", "./index.html");
+//  } else {
+//    link.setAttribute("href", "./");
+//  }
 
   function findMatchingElement() {
     var currentUrl = window.location.href;
@@ -85,6 +85,11 @@ if ((at = "vertical")) {
     });
   });
 }
+
+
+
+
+
 if ((at = "horizontal")) {
   function findMatchingElement() {
     var currentUrl = window.location.href;
