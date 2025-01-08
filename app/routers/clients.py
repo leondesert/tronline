@@ -38,7 +38,7 @@ def save_file(file: UploadFile):
 
 
 @router.get("/", response_class=HTMLResponse)
-async def clients_index(request: Request):
+async def index(request: Request):
 
     clients = ClientService.get_all_clients()
 
@@ -47,7 +47,7 @@ async def clients_index(request: Request):
 
 
 @router.get("/create", response_class=HTMLResponse)
-async def clients_create(request: Request):
+async def create(request: Request):
     client = {
         "full_name": "Андрей"
     }
@@ -66,9 +66,9 @@ async def clients_create(request: Request):
 
 
 
-# Маршрут для добавления клиента
+
 @router.post("/add")
-async def clients_add(
+async def add(
     full_name: str = Form(...),
     phone: str = Form(...),
     gender: str = Form(...),
@@ -119,7 +119,7 @@ async def clients_add(
 
 
 @router.post("/update")
-async def clients_update(
+async def update(
     id: int = Form(...),
     full_name: str = Form(...),
     phone: str = Form(...),
@@ -170,7 +170,7 @@ async def clients_update(
 
 
 @router.delete("/delete/{client_id}")
-async def delete_client(client_id: int):
+async def delete(client_id: int):
 
     try:
         # удалить клиента

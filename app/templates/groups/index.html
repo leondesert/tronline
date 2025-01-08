@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Клиенты{% endblock %}
+{% block title %}Группы{% endblock %}
 
 {% block content %}
 
@@ -11,7 +11,7 @@
         <h4 class="card-title mb-0">Группы</h4>
       </div>
       <div class="col-lg-2 text-end">
-        <a href="/clients/create" type="button" class="btn btn-success">Создать</a>
+        <a href="/groups/create" type="button" class="btn btn-success">Создать</a>
       </div>
     </div>
 
@@ -39,6 +39,7 @@
                 </select>
             </div>
           </div>
+
           <div class="col-sm-3 d-flex align-items-end">
             <div class="mb-3">
               <button type="submit" class="btn btn-primary">
@@ -84,35 +85,39 @@
             <th>
               <input type="checkbox" id="selectAll" />
             </th>
-            <th>ФИО</th>
-            <th>Год рождения</th>
-            <th>Телефон</th>
-            <th>Баланс</th>
+            <th>Название</th>
+            <th>Начало обучения</th>
+            <th>Ученики</th>
+            <th>Расписание</th>
+            <th>Собрано за месяц</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          {% for client in clients %}
+          {% for item in groups %}
           <tr>
             <td>
-              <input type="checkbox" class="select-client" value="{{ client.id }}" />
+              <input type="checkbox" class="select-client" value="{{ item.id }}" />
             </td>
             <td>
               <div class="d-flex align-items-center">
                 <img src="/static/images/profile/user-10.jpg" class="rounded-circle" width="40" height="40" />
                 <div class="ms-3">
-                  <h6 class="fs-4 fw-semibold mb-0">{{ client.full_name }}</h6>
+                  <h6 class="fs-4 fw-semibold mb-0">{{ item.name }}</h6>
                 </div>
               </div>
             </td>
             <td>
-              <p class="mb-0 fw-normal">{{ client.birth_date }}</p>
+              <p class="mb-0 fw-normal">{{ item.start_date }}</p>
             </td>
             <td>
-              <p class="mb-0 fw-normal">{{ client.phone }}</p>
+              <p class="mb-0 fw-normal">{{ item.position }}</p>
             </td>
             <td>
-              <p class="mb-0 fw-normal">{{ client.balance }}</p>
+              <p class="mb-0 fw-normal">{{ item.schedule }}</p>
+            </td>
+            <td>
+              <p class="mb-0 fw-normal">{{ item.position }}</p>
             </td>
             <td>
               <div class="dropdown dropstart">
@@ -121,12 +126,12 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <li>
-                    <a class="dropdown-item d-flex align-items-center gap-3" href="/clients/update/{{ client.id }}">
+                    <a class="dropdown-item d-flex align-items-center gap-3" href="/groups/update/{{ item.id }}">
                       <i class="fs-4 ti ti-edit"></i>Редактировать
                     </a>
                   </li>
                   <li>
-                    <button class="dropdown-item d-flex align-items-center gap-3 btn-delete-client" data-client-id="{{ client.id }}">
+                    <button class="dropdown-item d-flex align-items-center gap-3 btn-delete-client" data-client-id="{{ item.id }}">
                       <i class="fs-4 ti ti-trash"></i>Удалить
                     </button>
                   </li>
@@ -144,7 +149,7 @@
 </div>
 
 
-<script src="static/js/custom/clients/index.js"></script>
+<script src="static/js/custom/groups/index.js"></script>
 
 
 {% endblock %}
