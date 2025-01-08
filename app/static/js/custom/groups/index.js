@@ -38,8 +38,17 @@ document.getElementById('deleteSelected').addEventListener('click', async functi
       return;
     }
 
-    const confirmed = confirm('Вы действительно хотите удалить выбранные записи?');
-    if (!confirmed) return;
+    // Используем SweetAlert вместо confirm
+    const result = await Swal.fire({
+        title: "Вы уверены?",
+        text: "Хотите удалить выбранные записи?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Да, удалить!",
+        cancelButtonText: "Отмена"
+    });
 
     const response = await fetch('/groups/delete_bulk', {
       method: 'POST',
@@ -83,8 +92,19 @@ document.getElementById('deleteSelected').addEventListener('click', async functi
 document.querySelectorAll('.btn-delete-client').forEach(button => {
     button.addEventListener('click', async function() {
         const clientId = this.dataset.clientId; // Получаем ID клиента
-        const confirmed = confirm('Вы действительно хотите удалить эту запись?');
-        if (!confirmed) return;
+
+
+        // Используем SweetAlert вместо confirm
+        const result = await Swal.fire({
+            title: "Вы уверены?",
+            text: "Это действие нельзя будет отменить!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Да, удалить!",
+            cancelButtonText: "Отмена"
+        });
 
         // Отправляем запрос на сервер для удаления
         const response = await fetch(`/groups/delete/${clientId}`, { method: 'DELETE' });

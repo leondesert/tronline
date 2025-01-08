@@ -90,7 +90,7 @@
             <th>Ученики</th>
             <th>Расписание</th>
             <th>Собрано за месяц</th>
-            <th></th>
+            <th>Действия</th>
           </tr>
         </thead>
         <tbody>
@@ -120,23 +120,38 @@
               <p class="mb-0 fw-normal">{{ item.position }}</p>
             </td>
             <td>
-              <div class="dropdown dropstart">
-                <a href="javascript:void(0)" class="text-muted" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="ti ti-dots fs-5"></i>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <li>
-                    <a class="dropdown-item d-flex align-items-center gap-3" href="/groups/update/{{ item.id }}">
-                      <i class="fs-4 ti ti-edit"></i>Редактировать
-                    </a>
-                  </li>
-                  <li>
-                    <button class="dropdown-item d-flex align-items-center gap-3 btn-delete-client" data-client-id="{{ item.id }}">
-                      <i class="fs-4 ti ti-trash"></i>Удалить
+
+              <div class="row">
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-sm btn-danger btn-delete-client" data-client-id="{{ item.id }}">
+                      <i class="ti ti-trash fs-5"></i>
                     </button>
-                  </li>
-                </ul>
+                    <a type="button" class="btn btn-sm btn-primary" href="/groups/update/{{ item.id }}">
+                      <i class="ti ti-edit fs-5"></i>
+                    </a>
+                </div>
               </div>
+
+
+<!--              <div class="dropdown dropstart">-->
+<!--                <a href="javascript:void(0)" class="text-muted" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                  <i class="ti ti-dots fs-5"></i>-->
+<!--                </a>-->
+<!--                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">-->
+<!--                  <li>-->
+<!--                    <a class="dropdown-item d-flex align-items-center gap-3" href="/groups/update/{{ item.id }}">-->
+<!--                      <i class="fs-4 ti ti-edit"></i>Редактировать-->
+<!--                    </a>-->
+<!--                  </li>-->
+<!--                  <li>-->
+<!--                    <button class="dropdown-item d-flex align-items-center gap-3 btn-delete-client" data-client-id="{{ item.id }}">-->
+<!--                      <i class="fs-4 ti ti-trash"></i>Удалить-->
+<!--                    </button>-->
+<!--                  </li>-->
+<!--                </ul>-->
+<!--              </div>-->
+
+
             </td>
           </tr>
           {% endfor %}
