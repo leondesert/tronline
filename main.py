@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 
-from app.routers import clients, groups
+from app.routers import clients, groups, schedule
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 
@@ -14,7 +14,7 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 # Подключаем маршруты
 app.include_router(clients.router, prefix="/clients", tags=["Clients"])
 app.include_router(groups.router, prefix="/groups", tags=["Groups"])
-
+app.include_router(schedule.router, prefix="/schedule", tags=["Schedule"])
 
 
 @app.get("/", response_class=HTMLResponse)
