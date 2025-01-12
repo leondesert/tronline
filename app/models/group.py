@@ -17,10 +17,12 @@ class GroupModel:
         query = """
         SELECT 
             id,
-            full_name,
-            YEAR(birth_date) as birth_date,
-            phone,
-            balance
+            name,
+            sport_type,
+            coaches,
+            start_date,
+            position,
+            schedule
         FROM groups
         WHERE id = %s
         """

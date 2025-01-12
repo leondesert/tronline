@@ -4,6 +4,8 @@ from fastapi import FastAPI, Request, HTTPException, Form, File, UploadFile
 from fastapi.templating import Jinja2Templates
 
 from app.models.schedule import *
+from app.models.group import *
+from app.models.client import *
 from app.services.schedule import *
 from app.schemas.schedule import *
 import json
@@ -16,6 +18,18 @@ templates = Jinja2Templates(directory="app/templates")
 async def index(request: Request):
 
     classes = ScheduleService.get_all_classes()
+    for classdata in classes:
+        coaches = json.loads(classdata['coaches'])
+        names = []
+        for coach in coaches:
+            client = ClientModel.get_client_by_id(coach)
+            names.append(client['full_name'])
+
+        classdata['coaches'] = ','.join(names)
+        
+
+        group_data = GroupModel.get_group_by_id(classdata['group_id'])
+        classdata['group_id'] = group_data['name']
 
     return templates.TemplateResponse("schedule/index.html", {"request": request, "classes": classes})
 
