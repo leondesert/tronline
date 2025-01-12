@@ -15,7 +15,7 @@ templates = Jinja2Templates(directory="app/templates")
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request):
 
-    classes = ScheduleModel.get_all_classes()
+    classes = ScheduleService.get_all_classes()
 
     return templates.TemplateResponse("schedule/index.html", {"request": request, "classes": classes})
 
@@ -71,7 +71,7 @@ async def add(request: Request):
 
 
         # Добавить в бд
-        ScheduleModel.add_classes(data)
+        ScheduleService.add_classes(data)
 
         # Возврат успешного ответа
         return {"status": "success", "message": "Занятие создано", "data": data}
@@ -86,7 +86,7 @@ async def add(request: Request):
 async def delete(class_id: int):
     try:
         # удалить клиента
-        message = ScheduleModel.delete(class_id)
+        message = ScheduleService.delete(class_id)
 
         return {"status": "success", "message": message}
 
@@ -98,7 +98,7 @@ async def delete(class_id: int):
 async def delete_bulk(request: DeleteClasses):
     try:
         # удалить клиентов
-        message = ScheduleModel.delete_selects(request.ids)
+        message = ScheduleService.delete_selects(request.ids)
 
         return {"status": "success", "message": message}
     except Exception as e:

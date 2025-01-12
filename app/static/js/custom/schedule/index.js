@@ -53,7 +53,7 @@ document.getElementById('deleteSelected').addEventListener('click', async functi
 
     if (!result.isConfirmed) return; // Если пользователь отменил действие, выходим из функции
 
-    const response = await fetch('/schedule/delete_selects', {
+    const response = await fetch('/schedule/delete_bulk', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
