@@ -13,6 +13,24 @@ class ScheduleModel:
                 return cursor.fetchall()
 
     @staticmethod
+    def get_classes_by_id(id: int):
+        query = """
+        SELECT 
+            id,
+            start_time,
+            end_time,
+            group_id,
+            coaches,
+            comment
+        FROM schedule
+        WHERE id = %s
+        """
+        with get_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute(query, (id,))
+                return cursor.fetchone()
+            
+    @staticmethod
     def get_classes_by_weekday(weekday: int):
         query = """
         SELECT 
@@ -30,6 +48,34 @@ class ScheduleModel:
                 cursor.execute(query, (weekday,))
                 return cursor.fetchone()
 
+    @staticmethod
+    def add_classes(classes: dict):
+        query = """
+        INSERT INTO schedule (
+            group_id, start_time, end_time, coaches, weekday, comment
+        ) VALUES (%s, %s, %s, %s, %s, %s)
+        """
+
+        with get_connection() as conn:
+            with conn.cursor() as cursor:
+                # Передаем данные клиента в запрос
+                cursor.execute(query, (
+                    classes.get('group'),
+                    classes.get('start_time'),
+                    classes.get('end_time'),
+                    classes.get('coaches'),
+                    classes.get('date'),
+                    classes.get('comment')
+                ))
+
+                # Проверяем, был ли добавлен хотя бы один клиент
+                if cursor.rowcount > 0:
+                    conn.commit()
+                    return {"message": "Задание успешно добавлено!"}
+                else:
+                    # Если строка не была добавлена, выбрасываем исключение
+                    raise Exception("Ошибка добавления задания")
+                
     @staticmethod
     def update_class(classes: dict):
         query = """
@@ -65,7 +111,7 @@ class ScheduleModel:
                     raise Exception("Занятие с таким ID не найдено или данные не были изменены.")
 
     @staticmethod
-    def delete(class_id: int):
+    def delete_class(class_id: int):
         query = "DELETE FROM schedule WHERE id = %s"
         with get_connection() as conn:
             with conn.cursor() as cursor:

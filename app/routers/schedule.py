@@ -25,7 +25,7 @@ async def index(request: Request):
             client = ClientModel.get_client_by_id(coach)
             names.append(client['full_name'])
 
-        classdata['coaches'] = ','.join(names)
+        classdata['coaches'] = ', '.join(names)
         
 
         group_data = GroupModel.get_group_by_id(classdata['group_id'])
@@ -42,13 +42,18 @@ async def create(request: Request):
     }
 
     params = {
-        "title_card": "Создать группу",
+        "title_card": "Создать занятие",
         "action": "/schedule/add",
     }
 
+    groups = GroupModel.get_all_groups()
+    clients = ClientModel.get_all_clients()
+    print(clients)
     return templates.TemplateResponse("schedule/create.html", {
         "request": request,
         "params": params,
+        "groups": groups,
+        "clients": clients,
         "client": client
     })
 
@@ -57,32 +62,13 @@ async def create(request: Request):
 @router.post("/add")
 async def add(request: Request):
     try:
-
         form = await request.form()  # Получаем все данные из формы
         data = {}
-        repeater_group = []
 
         # Перебираем все ключи формы
         for key, value in form.items():
-            if key.startswith("repeater-group"):
-                # Парсим динамическую группу
-                key_parts = key.split("[")
-                group_index = int(key_parts[1][:-1])  # Извлекаем индекс
-                field_name = key_parts[2][:-1]  # Извлекаем имя поля
-                # Добавляем в список
-                while len(repeater_group) <= group_index:
-                    repeater_group.append({})
-                repeater_group[group_index][field_name] = value
-            else:
-                data[key] = value
 
-        # Добавляем repeater_group в итоговый словарь
-
-        json_data = json.dumps(repeater_group) # Преобразование массива в JSON
-        data["schedule"] = json_data
-
-        print(data)
-
+            data[key] = value
 
         # Добавить в бд
         ScheduleService.add_classes(data)
@@ -96,11 +82,11 @@ async def add(request: Request):
 
 
 
-@router.delete("/delete/{group_id}")
+@router.delete("/delete/{class_id}")
 async def delete(class_id: int):
     try:
         # удалить клиента
-        message = ScheduleService.delete(class_id)
+        message = ScheduleService.delete_class(class_id)
 
         return {"status": "success", "message": message}
 

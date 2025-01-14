@@ -10,11 +10,15 @@ class ScheduleService:
         return ScheduleModel.get_classes_by_weekday(weekday)
 
     @staticmethod
+    def add_classes(class_data: dict):
+        return ScheduleModel.add_classes(class_data)
+    
+    @staticmethod
     def update_class(class_data: dict):
         return ScheduleModel.update_class(class_data)
 
     @staticmethod
-    def delete_client(class_id: int):
+    def delete_class(class_id: int):
         return ScheduleModel.delete_class(class_id)
 
     @staticmethod

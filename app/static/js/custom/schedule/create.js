@@ -1,8 +1,9 @@
 document.getElementById('buttonSave').addEventListener('click', async function () {
     const form = document.querySelector('form'); // Находим форму
     const formData = new FormData(form); // Собираем данные из формы
-
-
+    const coaches = formData.getAll('coaches');
+    json_data = JSON.stringify(coaches)
+    formData.set("coaches", json_data);
     try {
         const response = await fetch(params['action'], {
             method: 'POST',
@@ -33,7 +34,3 @@ document.getElementById('buttonSave').addEventListener('click', async function (
         alert('Произошла ошибка: ' + error.message); // Уведомление об ошибке
     }
 });
-
-
-
-
